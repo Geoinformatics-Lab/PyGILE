@@ -10,7 +10,7 @@ Start with this short introduction to setting up PyGILE and exploring its intera
 
 https://github.com/user-attachments/assets/f2a470af-96b3-43a3-b045-96d0c5ee30c6
 
-Watch and learn Full installation and setup video at
+Watch the full YouTube video for installation, setup and usage via the following link:
 
 https://www.youtube.com/watch?v=aimkNzOxtaQ
 
