@@ -1,0 +1,39 @@
+# Runs every PyGILE notebook from top to bottom, so a broken lesson is caught
+# before a student finds it. Runs on every push and pull request, and every
+# Monday, because library updates can break notebooks even when nothing changed here.
+name: Test notebooks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
+
+jobs:
+  notebooks:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
+    env:
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create the pygile environment
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment.yml
+          cache-environment: true
+
+      - name: Install the test runner
+        run: pip install nbmake pytest
+
+      - name: Run all notebooks (original notebooks and the new course)
+        # 3(c) is skipped: the US Census API needs a personal key since May 2026.
+        # Remove the --ignore line when 3(c) is rebuilt on Nepal data.
+        run: |
+          pytest --nbmake --nbmake-timeout=600 pyGILE_notebooks PyGILE_course \
+            --ignore="pyGILE_notebooks/3_Advanced_Vector_Analysis_Operations/(c)Merge Data & Dissolve Polygons.ipynb"

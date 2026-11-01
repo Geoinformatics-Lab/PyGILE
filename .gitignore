@@ -1,2 +1,25 @@
-pygis/temp/**
-./temp/**
+# Files the notebooks write while you work (never commit these)
+pygis/temp/*
+!pygis/temp/.gitkeep
+pygis/data/temp/
+outputs/
+pyGILE_notebooks/**/*.tif
+pyGILE_notebooks/**/*.TIF
+pyGILE_notebooks/**/*.nc
+
+# GDAL side files created when rasters are opened
+*.aux.xml
+
+# Jupyter autosaves
+.ipynb_checkpoints/
+
+# Python and system clutter
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# Installer logs
+pygile_install.log
+pygile_errors.log
+pygile_installation.log
