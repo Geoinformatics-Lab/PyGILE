@@ -189,7 +189,7 @@ REM BATCH 5: Specialized Geospatial Analysis + Network Tools
 REM ============================================================
 echo [7/8] Installing specialized analysis tools... [87%%]
 echo Installing: OSMnx, Rasterstats, Cloud access, Earth Engine, Advanced mapping
-call :install_with_fallbacks "osmnx rasterstats xarray-spatial pykrige geoplot sympy" "Specialized analysis core"
+call :install_with_fallbacks "osmnx rasterstats xarray-spatial pykrige" "Specialized analysis core"
 call :install_with_fallbacks "pystac pystac-client stackstac odc-stac planetary-computer" "Cloud data access"
 call :install_with_fallbacks "geemap" "Advanced mapping"
 call :install_with_fallbacks "palettable" "Color palettes"
@@ -204,7 +204,7 @@ echo [8/8] Installing additional utilities... [100%%]
 echo Installing: Development tools, Documentation, Regional data, Meta-packages
 
 REM Install with pip fallbacks for packages that often fail with conda
-"%INSTALLER%" run -n pygile pip install --no-cache-dir earthengine-api census us sklearn-xarray pygis >> "%LOGFILE%" 2>&1
+"%INSTALLER%" run -n pygile pip install --no-cache-dir earthengine-api sklearn-xarray pygis >> "%LOGFILE%" 2>&1
 "%INSTALLER%" run -n pygile pip install --no-cache-dir black flake8 jupyter-book nbconvert >> "%LOGFILE%" 2>&1
 "%INSTALLER%" run -n pygile pip install --no-cache-dir pykrige geojson >> "%LOGFILE%" 2>&1
 

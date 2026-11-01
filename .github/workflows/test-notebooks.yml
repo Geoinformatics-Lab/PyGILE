@@ -32,8 +32,5 @@ jobs:
         run: pip install nbmake pytest
 
       - name: Run all notebooks (original notebooks and the new course)
-        # 3(c) is skipped: the US Census API needs a personal key since May 2026.
-        # Remove the --ignore line when 3(c) is rebuilt on Nepal data.
         run: |
-          pytest --nbmake --nbmake-timeout=600 pyGILE_notebooks PyGILE_course \
-            --ignore="pyGILE_notebooks/3_Advanced_Vector_Analysis_Operations/(c)Merge Data & Dissolve Polygons.ipynb"
+          pytest --nbmake --nbmake-timeout=600 PyGILE_course pyGILE_notebooks

@@ -28,7 +28,7 @@ PyGILE is an educational/application toolkit that includes:
 
 ## New: the PyGILE Course
 
-A new, step-by-step course for absolute beginners is being built in [`PyGILE_course/`](PyGILE_course/README.md). Every step has theory, a worked example on Nepal data, and practice questions with solutions. **Part A (Python, 10 lessons, 275 questions) is ready.**
+A step-by-step course for absolute beginners, in [`PyGILE_course/`](PyGILE_course/README.md). Every step has theory, a worked example on Nepal data, and practice questions with worked solutions; the lessons are linked in order like a book. **Ready now: Part A · Python (10 lessons) and Part B · Vector GIS (11 lessons), with 564 practice questions.** Parts C (rasters), D (satellite imagery) and E (a landslide capstone) are in progress.
 
 ## Getting Started
 
@@ -84,10 +84,10 @@ Note: the image is large, because PyGILE-Plus also includes SAGA, GRASS, Orfeo T
 Once you've completed the installation:
 
 1. **Start Jupyter Lab** - This opens your web-based coding environment
-2. **Open the tutorials** - Browse to the [`pyGILE_notebooks/`](https://github.com/Geoinformatics-Lab/PyGILE/tree/main/pyGILE_notebooks) folder
-3. **Start learning!** - Work through the interactive notebooks at your own pace
+2. **Open the course** - Go to [`PyGILE_course/`](PyGILE_course/README.md) and start with Lesson A1
+3. **Start learning!** - Each lesson links to the next. The older raster and remote-sensing notebooks are in [`pyGILE_notebooks/`](pyGILE_notebooks) until the course replaces them
 
-Files the notebooks create are saved in `pygis/temp/`. Git ignores that folder, so your outputs never get mixed into the course files.
+Files the lessons create are saved in `PyGILE_course/outputs/` (older notebooks use `pygis/temp/`). Git ignores both folders, so your outputs never get mixed into the course files.
 
 ## Need Help?
 

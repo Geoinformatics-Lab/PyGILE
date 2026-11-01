@@ -2,7 +2,9 @@
 
 A complete, hands-on course in Python and geospatial science for **absolute beginners**: no coding and no GIS experience needed. Every example uses data from Nepal and the Himalaya.
 
-> **Status:** Part A (Python) is ready. Parts B to E are being written. The original PyGILE notebooks in `pyGILE_notebooks/` stay available until the new course is complete.
+> **Status:** Part A (Python) and Part B (vector GIS) are ready: 21 lessons and 564 practice questions. Parts C to E are being written. The older raster and remote-sensing notebooks in `../pyGILE_notebooks/` stay available until Parts C and D replace them.
+
+Every lesson has a navigation bar at the top and bottom, so you can move through the course like a book: **← Previous · Course home · Next →**.
 
 ## How every lesson works
 
@@ -36,10 +38,27 @@ Type your answer in the empty cell under each question, run it, then click **Sho
 
 **Part A total: 275 questions with worked solutions.**
 
+## Part B · Vector GIS: the map of Nepal
+
+| Lesson | You will learn | Questions |
+| --- | --- | --- |
+| [B1 · Maps, coordinates, latitude and longitude](B_Vector/B01_Maps_and_coordinates.ipynb) | What a map is, latitude and longitude, degrees to km, map scale | 25 |
+| [B2 · Points, lines and polygons](B_Vector/B02_Points_lines_and_polygons.ipynb) | Shapely geometries: the Everest trek as a line, boxes, distances | 25 |
+| [B3 · GeoDataFrames and file formats](B_Vector/B03_GeoDataFrames_and_file_formats.ipynb) | Districts as a table, points from CSV, GeoPackage, Shapefile, GeoJSON | 25 |
+| [B4 · Coordinate reference systems](B_Vector/B04_Coordinate_reference_systems.ipynb) | EPSG codes, UTM 45N, `set_crs` vs `to_crs`, areas in km² | 28 |
+| [B5 · Selecting by attribute](B_Vector/B05_Selecting_by_attribute.ipynb) | Filtering districts, `.isin`, `.str`, boxes with `.cx` | 25 |
+| [B6 · Joins and dissolve](B_Vector/B06_Joins_and_dissolve.ipynb) | Joining tables, fixing name mismatches, districts into provinces | 28 |
+| [B7 · Clip and select by location](B_Vector/B07_Clip_and_select_by_location.ipynb) | Spatial predicates, neighbours, clipping | 25 |
+| [B8 · Buffers and nearest features](B_Vector/B08_Buffers_and_nearest_features.ipynb) | Buffers in metres, nearest headquarters to every landslide | 25 |
+| [B9 · Spatial joins and overlays](B_Vector/B09_Spatial_joins_and_overlays.ipynb) | Landslides per district, intersection, union, difference | 28 |
+| [B10 · Counting points and density maps](B_Vector/B10_Counting_points_and_density_maps.ipynb) | Grids, hexagons, density, honest map classification | 28 |
+| [B11 · Making a beautiful map](B_Vector/B11_Making_a_beautiful_map.ipynb) | Layers, colours, labels, scale bar, north arrow, inset map | 27 |
+
+**Part B total: 289 questions with worked solutions.**
+
 ## Coming next
 
-- **Part B · Vector GIS:** maps and coordinates, points/lines/polygons, file formats, coordinate reference systems, joins, buffers, overlays, and a publication-quality map.
-- **Part C · Rasters:** elevation models, clipping, reprojecting, slope, aspect and hillshade, zonal statistics, interpolation.
+- **Part C · Rasters:** elevation models of Nepal, clipping, reprojecting, slope, aspect and hillshade, zonal statistics, interpolation.
 - **Part D · Satellite imagery:** Sentinel-2 through STAC, spectral indices, change detection, classification.
 - **Part E · Capstone:** a landslide susceptibility model, leading on to PyGILE-Plus.
 
@@ -47,10 +66,12 @@ Type your answer in the empty cell under each question, run it, then click **Sho
 
 | Folder | Contents |
 | --- | --- |
-| `A_Python/` | Part A lessons |
-| `data/` | Small datasets used by the lessons (see `data/README.md`) |
+| `A_Python/`, `B_Vector/` | The lessons |
+| `data/` | Small datasets used by the lessons, with sources and licences (see `data/README.md`) |
+| `images/` | Concept diagrams used by the lessons (see `images/README.md`) |
 | `outputs/` | Files the lessons write. Created when you run them and ignored by git |
-| `STYLE_GUIDE.md` | How lessons are written, for contributors |
+| `tools/` | For course authors: `qa.py` checks a lesson and all its solutions, `add_nav.py` refreshes the navigation bars, `lessonkit.py` builds lessons in the standard format |
+| `STYLE_GUIDE.md` | How lessons are written |
 
 ## Before you start
 

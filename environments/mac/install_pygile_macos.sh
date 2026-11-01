@@ -18,9 +18,9 @@ echo "Installation started at $(date)" > "$LOGFILE"
 echo "Error summary" > "$ERRORLOG"
 
 # ------------------------------------------------------------
-# [1/8] Find mamba (faster) or conda from Miniforge
+# [1/7] Find mamba (faster) or conda from Miniforge
 # ------------------------------------------------------------
-echo "[1/8] Looking for Miniforge (mamba or conda)..."
+echo "[1/7] Looking for Miniforge (mamba or conda)..."
 if command -v mamba &> /dev/null; then
     INSTALLER="mamba"
 elif command -v conda &> /dev/null; then
@@ -48,9 +48,9 @@ install_group() {
 }
 
 # ------------------------------------------------------------
-# [2/8] Fresh environment with Python 3.12
+# [2/7] Fresh environment with Python 3.12
 # ------------------------------------------------------------
-echo "[2/8] Creating a fresh pygile environment with Python 3.12..."
+echo "[2/7] Creating a fresh pygile environment with Python 3.12..."
 $INSTALLER env remove -n pygile -y &> /dev/null
 if ! $INSTALLER create -n pygile --override-channels -c conda-forge python=3.12 -y >> "$LOGFILE" 2>&1; then
     echo "CRITICAL: could not create the environment. See $LOGFILE."
@@ -59,36 +59,23 @@ fi
 echo "      Done: environment created"
 
 # ------------------------------------------------------------
-# [3/8] to [7/8] Package groups (same groups as the Windows installer)
+# [3/7] to [7/7] Package groups (same groups as the Windows installer)
 # ------------------------------------------------------------
-install_group "3/8" "foundation stack (NumPy, Pandas, SciPy, Matplotlib, scikit-learn)" \
+install_group "3/7" "foundation stack (NumPy, Pandas, SciPy, Matplotlib, scikit-learn)" \
     numpy pandas scipy matplotlib scikit-learn
 
-install_group "4/8" "geospatial core (GDAL, PROJ, GEOS, Shapely, PyProj, GeoPandas)" \
+install_group "4/7" "geospatial core (GDAL, PROJ, GEOS, Shapely, PyProj, GeoPandas)" \
     gdal proj geos libspatialindex fiona pyogrio shapely pyproj geopandas
 
-install_group "5/8" "raster and data stack (Rasterio, Xarray, rioxarray, Dask, NetCDF)" \
+install_group "5/7" "raster and data stack (Rasterio, Xarray, rioxarray, Dask, NetCDF)" \
     rasterio xarray rioxarray dask dask-geopandas netcdf4 h5py zarr tifffile
 
-install_group "6/8" "JupyterLab and maps (Folium, Contextily, mapclassify, scale bars)" \
+install_group "6/7" "JupyterLab and maps (Folium, Contextily, mapclassify, scale bars)" \
     jupyterlab ipykernel ipywidgets plotly folium contextily mapclassify matplotlib-scalebar
 
-install_group "7/8" "specialised tools (OSMnx, rasterstats, STAC, kriging, geoplot)" \
+install_group "7/7" "specialised tools (OSMnx, rasterstats, STAC, kriging)" \
     osmnx rasterstats xarray-spatial pystac pystac-client stackstac odc-stac planetary-computer \
-    pykrige geoplot sympy
-
-# ------------------------------------------------------------
-# [8/8] Packages only available through pip
-# ------------------------------------------------------------
-echo "[8/8] Installing pip packages (census, us)..."
-if $INSTALLER run -n pygile pip install --no-cache-dir census us >> "$LOGFILE" 2>&1; then
-    echo "      Done: pip packages"
-    STEP_COUNT=$((STEP_COUNT + 1))
-else
-    echo "      WARNING: pip packages had problems (see $LOGFILE)."
-    echo "FAILED: pip packages" >> "$ERRORLOG"
-    ERROR_COUNT=$((ERROR_COUNT + 1))
-fi
+    pykrige
 
 # ------------------------------------------------------------
 # Verification
