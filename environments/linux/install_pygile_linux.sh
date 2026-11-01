@@ -1,98 +1,260 @@
 #!/bin/bash
-# ============================================================
-#   PYGILE ENVIRONMENT INSTALLER (Linux and macOS)
-#   Installs the pygile environment step by step, in the same
-#   groups as the Windows installer, so you can see what each
-#   group of packages is for.
-#
-#   Prefer one command instead? From the PyGILE folder run:
-#       mamba env create -f environment.yml
-# ============================================================
+
+# PyGILE installer - skips failures, continues with others
 
 LOGFILE="pygile_install.log"
 ERRORLOG="pygile_errors.log"
+SUCCESS_COUNT=0
 ERROR_COUNT=0
-STEP_COUNT=0
 
-echo "Installation started at $(date)" > "$LOGFILE"
-echo "Error summary" > "$ERRORLOG"
-
-# ------------------------------------------------------------
-# [1/7] Find mamba (faster) or conda from Miniforge
-# ------------------------------------------------------------
-echo "[1/7] Looking for Miniforge (mamba or conda)..."
+# Find conda/mamba executable
 if command -v mamba &> /dev/null; then
     INSTALLER="mamba"
 elif command -v conda &> /dev/null; then
     INSTALLER="conda"
 else
-    echo "ERROR: neither mamba nor conda was found."
-    echo "Install Miniforge first: https://github.com/conda-forge/miniforge"
+    echo "Error: Neither conda nor mamba found"
     exit 1
 fi
-echo "      Using: $INSTALLER"
 
-# Install one group of packages from conda-forge and report the result
-install_group() {
-    local step="$1" description="$2"; shift 2
-    echo "[$step] Installing $description..."
-    echo "      $*"
-    if $INSTALLER install -n pygile --override-channels -c conda-forge "$@" -y >> "$LOGFILE" 2>&1; then
-        echo "      Done: $description"
-        STEP_COUNT=$((STEP_COUNT + 1))
+echo "Starting PyGILE installation using $INSTALLER"
+echo "Installation started at $(date)" > "$LOGFILE"
+echo "Error summary" > "$ERRORLOG"
+
+# Remove existing environment
+$INSTALLER env remove -n pygile -y &>/dev/null
+
+# Install package function
+install_package() {
+    local package="$1"
+    if $INSTALLER install -n pygile -c conda-forge "$package" -y &>> "$LOGFILE"; then
+        ((SUCCESS_COUNT++))
     else
-        echo "      WARNING: $description had problems (see $LOGFILE). Continuing."
-        echo "FAILED: $description ($*)" >> "$ERRORLOG"
-        ERROR_COUNT=$((ERROR_COUNT + 1))
+        echo "FAILED: $package" >> "$ERRORLOG"
+        ((ERROR_COUNT++))
     fi
 }
 
-# ------------------------------------------------------------
-# [2/7] Fresh environment with Python 3.12
-# ------------------------------------------------------------
-echo "[2/7] Creating a fresh pygile environment with Python 3.12..."
-$INSTALLER env remove -n pygile -y &> /dev/null
-if ! $INSTALLER create -n pygile --override-channels -c conda-forge python=3.12 -y >> "$LOGFILE" 2>&1; then
-    echo "CRITICAL: could not create the environment. See $LOGFILE."
+# Install pip package function
+install_pip_package() {
+    local package="$1"
+    if $INSTALLER run -n pygile pip install "$package" &>> "$LOGFILE"; then
+        ((SUCCESS_COUNT++))
+    else
+        echo "PIP FAILED: $package" >> "$ERRORLOG"
+        ((ERROR_COUNT++))
+    fi
+}
+
+# Create base environment
+echo "Creating base environment"
+if ! $INSTALLER create -n pygile -c conda-forge python=3.10 -y >> "$LOGFILE" 2>&1; then
+    echo "CRITICAL: Failed to create base environment"
     exit 1
 fi
-echo "      Done: environment created"
 
-# ------------------------------------------------------------
-# [3/7] to [7/7] Package groups (same groups as the Windows installer)
-# ------------------------------------------------------------
-install_group "3/7" "foundation stack (NumPy, Pandas, SciPy, Matplotlib, scikit-learn)" \
-    numpy pandas scipy matplotlib scikit-learn
+# System dependencies
+system_packages=(
+    "gdal=3.6.2"
+    "proj=9.1.0"
+    "geos=3.11.1"
+    "libspatialindex"
+    "boost-cpp"
+)
 
-install_group "4/7" "geospatial core (GDAL, PROJ, GEOS, Shapely, PyProj, GeoPandas)" \
-    gdal proj geos libspatialindex fiona pyogrio shapely pyproj geopandas
+# Core scientific stack
+scientific_packages=(
+    "numpy=1.24.3"
+    "pandas"
+    "scipy"
+    "matplotlib"
+    "seaborn"
+    "scikit-learn"
+)
 
-install_group "5/7" "raster and data stack (Rasterio, Xarray, rioxarray, Dask, NetCDF)" \
-    rasterio xarray rioxarray dask dask-geopandas netcdf4 h5py zarr tifffile
+# Geospatial core
+geospatial_core_packages=(
+    "geopandas"
+    "rasterio"
+    "shapely"
+    "pyproj"
+    "fiona"
+)
 
-install_group "6/7" "JupyterLab and maps (Folium, Contextily, mapclassify, scale bars)" \
-    jupyterlab ipykernel ipywidgets plotly folium contextily mapclassify matplotlib-scalebar
+# Geospatial extras
+geospatial_extra_packages=(
+    "contextily"
+    "folium"
+    "osmnx"
+    "earthpy"
+    "mapclassify"
+    "geoplot"
+    "geowombat=2.1.22"
+)
 
-install_group "7/7" "specialised tools (OSMnx, rasterstats, STAC, kriging)" \
-    osmnx rasterstats xarray-spatial pystac pystac-client stackstac odc-stac planetary-computer \
-    pykrige
+# Data formats
+data_format_packages=(
+    "h5py"
+    "netcdf4"
+    "h5netcdf"
+    "xarray"
+    "rioxarray"
+    "zarr"
+    "tifffile"
+)
 
-# ------------------------------------------------------------
-# Verification
-# ------------------------------------------------------------
-echo ""
-echo "Checking that the main libraries work..."
-if $INSTALLER run -n pygile python -c "import numpy, pandas, geopandas, rasterio, rioxarray, xarray, matplotlib, osmnx; print('ok')" 2>> "$LOGFILE" | grep -q ok; then
-    echo "SUCCESS: the pygile environment is ready ($STEP_COUNT groups installed, $ERROR_COUNT problems)."
+# Parallel computing
+parallel_packages=(
+    "dask"
+)
+
+# Visualization
+visualization_packages=(
+    "plotly"
+    "bokeh"
+    "ipyleaflet"
+)
+
+# Image processing
+image_packages=(
+    "scikit-image"
+    "imageio-ffmpeg"
+)
+
+# Cloud and data access
+cloud_packages=(
+    "pystac"
+    "stackstac"
+    "planetary-computer"
+)
+
+# Web mapping
+webmap_packages=(
+    "localtileserver"
+    "rio-cogeo"
+    "owslib"
+)
+
+# Statistical tools
+stats_packages=(
+    "palettable"
+)
+
+# Jupyter
+jupyter_packages=(
+    "jupyter"
+    "jupyterlab=4.4.3"
+    "ipywidgets"
+)
+
+# Pip dependencies
+pip_dependencies=(
+    "pip"
+)
+
+# Pip packages
+pip_packages=(
+    "sympy==1.14.0"
+    "numpy-groupies==0.11.2"
+    "jupyter-book==1.0.4"
+    "geojson==3.2.0"
+    "dask-geopandas==0.4.3"
+    "pykrige==1.7.2"
+    "cenpy==1.0.1"
+    "census==0.8.24"
+    "us==3.2.0"
+    "sklearn-xarray==0.4.0"
+    "geemap"
+    "leafmap"
+    "rasterstats"
+    "xarray-spatial"
+    "earthengine-api"
+    "black"
+    "flake8"
+    "nbconvert"
+    "myst-parser"
+    "streamlit-folium"
+)
+
+echo "Installing system dependencies"
+for package in "${system_packages[@]}"; do
+    install_package "$package"
+done
+
+echo "Installing core scientific stack"
+for package in "${scientific_packages[@]}"; do
+    install_package "$package"
+done
+
+echo "Installing geospatial core packages"
+for package in "${geospatial_core_packages[@]}"; do
+    install_package "$package"
+done
+
+echo "Installing geospatial extras"
+for package in "${geospatial_extra_packages[@]}"; do
+    install_package "$package"
+done
+
+echo "Installing data format packages"
+for package in "${data_format_packages[@]}"; do
+    install_package "$package"
+done
+
+echo "Installing parallel computing packages"
+for package in "${parallel_packages[@]}"; do
+    install_package "$package"
+done
+
+echo "Installing visualization packages"
+for package in "${visualization_packages[@]}"; do
+    install_package "$package"
+done
+
+echo "Installing image processing packages"
+for package in "${image_packages[@]}"; do
+    install_package "$package"
+done
+
+echo "Installing cloud and data access packages"
+for package in "${cloud_packages[@]}"; do
+    install_package "$package"
+done
+
+echo "Installing web mapping packages"
+for package in "${webmap_packages[@]}"; do
+    install_package "$package"
+done
+
+echo "Installing statistical tools"
+for package in "${stats_packages[@]}"; do
+    install_package "$package"
+done
+
+echo "Installing Jupyter packages"
+for package in "${jupyter_packages[@]}"; do
+    install_package "$package"
+done
+
+echo "Installing pip dependencies"
+for package in "${pip_dependencies[@]}"; do
+    install_package "$package"
+done
+
+# Install pip packages
+echo "Installing pip packages"
+for package in "${pip_packages[@]}"; do
+    install_pip_package "$package"
+done
+
+# Summary
+TOTAL=$((${#system_packages[@]} + ${#scientific_packages[@]} + ${#geospatial_core_packages[@]} + ${#geospatial_extra_packages[@]} + ${#data_format_packages[@]} + ${#parallel_packages[@]} + ${#visualization_packages[@]} + ${#image_packages[@]} + ${#cloud_packages[@]} + ${#webmap_packages[@]} + ${#stats_packages[@]} + ${#jupyter_packages[@]} + ${#pip_dependencies[@]} + ${#pip_packages[@]}))
+echo "Installation complete: $SUCCESS_COUNT/$TOTAL packages installed"
+echo "Failed packages: $ERROR_COUNT (see $ERRORLOG)"
+
+# Test installation
+if $INSTALLER run -n pygile python -c "import geopandas, rasterio, xarray, matplotlib, numpy, pandas, folium, plotly; print('Core packages working')" &>/dev/null; then
+    echo "SUCCESS: Environment ready for use"
 else
-    echo "WARNING: a core library failed to import. See $LOGFILE and $ERRORLOG."
+    echo "WARNING: Core packages verification failed"
 fi
-
-echo ""
-echo "============================================================"
-echo "  HOW TO START WORKING"
-echo "============================================================"
-echo "  $INSTALLER activate pygile"
-echo "  jupyter lab"
-echo ""
-echo "Logs: $LOGFILE   Errors: $ERRORLOG"
