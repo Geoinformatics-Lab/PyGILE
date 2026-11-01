@@ -1,7 +1,0 @@
-station,district,province,elevation_m,jan_mm,feb_mm,mar_mm,apr_mm,may_mm,jun_mm,jul_mm,aug_mm,sep_mm,oct_mm,nov_mm,dec_mm
-Station A,Kaski,Gandaki,830,35,59,78,151,206,536,1045,952,592,198,42,42
-Station B,Kathmandu,Bagmati,1340,16,23,28,54,79,246,384,394,222,79,14,14
-Station C,Mustang,Gandaki,2740,3,5,6,11,17,37,69,68,37,14,3,3
-Station D,Morang,Koshi,80,19,24,40,64,111,276,507,456,235,95,20,20
-Station E,Jumla,Karnali,2300,8,14,16,29,58,127,222,175,109,38,7,9
-Station F,Sindhupalchok,Bagmati,1600,29,34,54,90,155,358,754,648,359,129,29,30
