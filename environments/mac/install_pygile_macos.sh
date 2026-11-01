@@ -1,44 +1,111 @@
 #!/bin/bash
-# PyGILE installer for macOS and Linux.
-# Creates the "pygile" environment from the single environment.yml
-# at the top of the repository, the same file used on every system.
+# ============================================================
+#   PYGILE ENVIRONMENT INSTALLER (macOS and Linux)
+#   Installs the pygile environment step by step, in the same
+#   groups as the Windows installer, so you can see what each
+#   group of packages is for.
+#
+#   Prefer one command instead? From the PyGILE folder run:
+#       mamba env create -f environment.yml
+# ============================================================
 
-set -e
+LOGFILE="pygile_install.log"
+ERRORLOG="pygile_errors.log"
+ERROR_COUNT=0
+STEP_COUNT=0
 
-# Find the repository's environment.yml, two folders above this script
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ENV_FILE="$SCRIPT_DIR/../../environment.yml"
+echo "Installation started at $(date)" > "$LOGFILE"
+echo "Error summary" > "$ERRORLOG"
 
-if [ ! -f "$ENV_FILE" ]; then
-    echo "Error: cannot find environment.yml at $ENV_FILE"
-    echo "Run this script from inside the PyGILE folder you downloaded."
-    exit 1
-fi
-
-# Use mamba if available (faster), otherwise conda
+# ------------------------------------------------------------
+# [1/8] Find mamba (faster) or conda from Miniforge
+# ------------------------------------------------------------
+echo "[1/8] Looking for Miniforge (mamba or conda)..."
 if command -v mamba &> /dev/null; then
     INSTALLER="mamba"
 elif command -v conda &> /dev/null; then
     INSTALLER="conda"
 else
-    echo "Error: neither mamba nor conda was found. Install Miniforge first (see README.md)."
+    echo "ERROR: neither mamba nor conda was found."
+    echo "Install Miniforge first: https://github.com/conda-forge/miniforge"
     exit 1
 fi
+echo "      Using: $INSTALLER"
 
-echo "Using $INSTALLER to create the pygile environment."
-echo "This downloads about 1 GB the first time and can take 5-15 minutes."
+# Install one group of packages from conda-forge and report the result
+install_group() {
+    local step="$1" description="$2"; shift 2
+    echo "[$step] Installing $description..."
+    echo "      $*"
+    if $INSTALLER install -n pygile --override-channels -c conda-forge "$@" -y >> "$LOGFILE" 2>&1; then
+        echo "      Done: $description"
+        STEP_COUNT=$((STEP_COUNT + 1))
+    else
+        echo "      WARNING: $description had problems (see $LOGFILE). Continuing."
+        echo "FAILED: $description ($*)" >> "$ERRORLOG"
+        ERROR_COUNT=$((ERROR_COUNT + 1))
+    fi
+}
 
-# Remove an old pygile environment if there is one, then create a fresh one
-$INSTALLER env remove -n pygile -y &> /dev/null || true
-$INSTALLER env create -n pygile -f "$ENV_FILE"
+# ------------------------------------------------------------
+# [2/8] Fresh environment with Python 3.12
+# ------------------------------------------------------------
+echo "[2/8] Creating a fresh pygile environment with Python 3.12..."
+$INSTALLER env remove -n pygile -y &> /dev/null
+if ! $INSTALLER create -n pygile --override-channels -c conda-forge python=3.12 -y >> "$LOGFILE" 2>&1; then
+    echo "CRITICAL: could not create the environment. See $LOGFILE."
+    exit 1
+fi
+echo "      Done: environment created"
 
-# Check that the main libraries import
-if $INSTALLER run -n pygile python -c "import geopandas, rasterio, rioxarray, matplotlib, pandas, numpy; print('ok')" | grep -q ok; then
-    echo ""
-    echo "SUCCESS: the pygile environment is ready."
-    echo "Next: run   $INSTALLER activate pygile   then   jupyter lab"
+# ------------------------------------------------------------
+# [3/8] to [7/8] Package groups (same groups as the Windows installer)
+# ------------------------------------------------------------
+install_group "3/8" "foundation stack (NumPy, Pandas, SciPy, Matplotlib, scikit-learn)" \
+    numpy pandas scipy matplotlib scikit-learn
+
+install_group "4/8" "geospatial core (GDAL, PROJ, GEOS, Shapely, PyProj, GeoPandas)" \
+    gdal proj geos libspatialindex fiona pyogrio shapely pyproj geopandas
+
+install_group "5/8" "raster and data stack (Rasterio, Xarray, rioxarray, Dask, NetCDF)" \
+    rasterio xarray rioxarray dask dask-geopandas netcdf4 h5py zarr tifffile
+
+install_group "6/8" "JupyterLab and maps (Folium, Contextily, mapclassify, scale bars)" \
+    jupyterlab ipykernel ipywidgets plotly folium contextily mapclassify matplotlib-scalebar
+
+install_group "7/8" "specialised tools (OSMnx, rasterstats, STAC, kriging, geoplot)" \
+    osmnx rasterstats xarray-spatial pystac pystac-client stackstac odc-stac planetary-computer \
+    pykrige geoplot sympy
+
+# ------------------------------------------------------------
+# [8/8] Packages only available through pip
+# ------------------------------------------------------------
+echo "[8/8] Installing pip packages (census, us)..."
+if $INSTALLER run -n pygile pip install --no-cache-dir census us >> "$LOGFILE" 2>&1; then
+    echo "      Done: pip packages"
+    STEP_COUNT=$((STEP_COUNT + 1))
 else
-    echo "WARNING: the environment was created, but a library failed to import."
-    echo "Please open an issue on GitHub and paste the output above."
-    exit 1
+    echo "      WARNING: pip packages had problems (see $LOGFILE)."
+    echo "FAILED: pip packages" >> "$ERRORLOG"
+    ERROR_COUNT=$((ERROR_COUNT + 1))
 fi
+
+# ------------------------------------------------------------
+# Verification
+# ------------------------------------------------------------
+echo ""
+echo "Checking that the main libraries work..."
+if $INSTALLER run -n pygile python -c "import numpy, pandas, geopandas, rasterio, rioxarray, xarray, matplotlib, osmnx; print('ok')" 2>> "$LOGFILE" | grep -q ok; then
+    echo "SUCCESS: the pygile environment is ready ($STEP_COUNT groups installed, $ERROR_COUNT problems)."
+else
+    echo "WARNING: a core library failed to import. See $LOGFILE and $ERRORLOG."
+fi
+
+echo ""
+echo "============================================================"
+echo "  HOW TO START WORKING"
+echo "============================================================"
+echo "  $INSTALLER activate pygile"
+echo "  jupyter lab"
+echo ""
+echo "Logs: $LOGFILE   Errors: $ERRORLOG"

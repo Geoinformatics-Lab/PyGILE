@@ -103,4 +103,4 @@ Navigate to pyGILE-main folder and open notebooks in pyGILE_notebooks folder
 
 ## Installed Packages
 
-The full, tested list is in [`environment.yml`](../../environment.yml) at the top of the repository: GeoPandas, Shapely, PyProj, Rasterio, rioxarray, Xarray, OSMnx, Matplotlib, Folium, Contextily, scikit-learn, STAC tools for satellite imagery, and JupyterLab.
+The installer adds packages in groups (foundation, geospatial core, rasters, JupyterLab and maps, specialised tools), the same groups as the Windows installer. The core libraries match [`environment.yml`](../../environment.yml), which the automatic notebook tests use: GeoPandas, Shapely, PyProj, Rasterio, rioxarray, Xarray, OSMnx, Matplotlib, Folium, Contextily, scikit-learn, STAC tools for satellite imagery, and JupyterLab.

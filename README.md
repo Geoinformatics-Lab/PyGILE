@@ -27,28 +27,11 @@ PyGILE is an educational/application toolkit that includes:
 
 ## Getting Started
 
-### Option 1: Install on Your Computer (Recommended)
+Choose one of three ways. Options 1 and 2 install the same libraries; option 3 uses a ready-made Docker image.
 
-PyGILE uses **one environment file, [`environment.yml`](environment.yml), on Windows, macOS and Linux**, so every learner gets the same libraries. Every notebook is tested against it automatically.
+### Option 1: Step-by-step installer (recommended for learners)
 
-1. Install [Miniforge](https://github.com/conda-forge/miniforge) (free, about 5 minutes).
-2. Download PyGILE: click the green **Code** button → **Download ZIP**, and unzip it. (Using git? `git clone --depth 1 https://github.com/Geoinformatics-Lab/PyGILE` downloads much less.)
-3. Open **Miniforge Prompt** (Windows) or **Terminal** (macOS/Linux), go into the PyGILE folder, and run:
-
-   ```bash
-   mamba env create -f environment.yml
-   ```
-
-4. Start working:
-
-   ```bash
-   mamba activate pygile
-   jupyter lab
-   ```
-
-Supported: Windows 10/11, Linux, and macOS 11 or newer (Intel and Apple Silicon).
-
-Prefer step-by-step guides with screenshots? Use the folder for your system:
+Learn how a Python environment is built, one group of packages at a time, using **Miniforge Prompt** (Windows) or **Terminal** (macOS/Linux).
 
 #### Windows Users
 
@@ -66,9 +49,30 @@ Prefer step-by-step guides with screenshots? Use the folder for your system:
 1. Go to [`environments/mac/`](https://github.com/Geoinformatics-Lab/PyGILE/tree/main/environments/mac) folder
 2. Follow the README.md instructions
 
-### Option 2: Docker
+### Option 2: One command
 
-For computers where you cannot install software directly, see the [`docker/`](https://github.com/Geoinformatics-Lab/PyGILE/tree/main/docker) folder.
+Already comfortable with Miniforge? Open **Miniforge Prompt** (Windows) or **Terminal** (macOS/Linux) in the PyGILE folder and run:
+
+```bash
+mamba env create -f environment.yml
+mamba activate pygile
+jupyter lab
+```
+
+The [`environment.yml`](environment.yml) file is what the automatic notebook tests use. Supported: Windows 10/11, Linux, and macOS 11 or newer (Intel and Apple Silicon). (Using git? `git clone --depth 1 https://github.com/Geoinformatics-Lab/PyGILE` downloads much less.)
+
+### Option 3: Docker, using the PyGILE-Plus image
+
+The [PyGILE-Plus](https://github.com/Geoinformatics-Lab/PyGILE-Plus) Docker image contains every library the PyGILE notebooks use, so you can run PyGILE in it without installing anything else. Install Docker Desktop, open a terminal **inside the PyGILE folder**, and run:
+
+```bash
+docker pull dockagile/pygile-plus
+docker run -it --name pygile -p 127.0.0.1:8888:8888 -v "${PWD}:/workspace/PyGILE" dockagile/pygile-plus
+```
+
+(Windows Command Prompt: replace `${PWD}` with `%cd%`.) Then open http://localhost:8888 and go to the `PyGILE` folder. Your work is saved in your own PyGILE folder.
+
+Note: the image is large, because PyGILE-Plus also includes SAGA, GRASS, Orfeo ToolBox and deep-learning libraries. On a slow connection, Option 1 or 2 is quicker. The `127.0.0.1` part keeps Jupyter visible only on your own computer, which matters on shared Wi-Fi.
 
 ## How to Use PyGILE
 
