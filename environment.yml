@@ -1,0 +1,54 @@
+# PyGILE environment: one file for Windows, macOS and Linux.
+#
+# Create it (from the folder that contains this file):
+#     mamba env create -f environment.yml
+# Update it later:
+#     mamba env update -f environment.yml --prune
+#
+# Every notebook in pyGILE_notebooks is tested against this file
+# (see .github/workflows/test-notebooks.yml).
+name: pygile
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+
+  # Core scientific Python
+  - numpy
+  - pandas
+  - scipy
+  - matplotlib
+  - scikit-learn
+
+  # Vector data
+  - geopandas>=1.0
+  - shapely>=2.0
+  - pyproj
+  - pyogrio
+  - mapclassify
+  - osmnx>=2.0
+
+  # Raster data and remote sensing
+  - rasterio
+  - rioxarray
+  - xarray
+  - dask               # used by rioxarray when reading large rasters in chunks
+  - netcdf4
+  - rasterstats
+  - xarray-spatial
+  - pystac-client
+  - odc-stac
+  - planetary-computer
+
+  # Maps
+  - contextily
+  - folium
+  - matplotlib-scalebar
+
+  # Interpolation
+  - pykrige
+
+  # JupyterLab
+  - jupyterlab
+  - ipykernel
+  - ipywidgets

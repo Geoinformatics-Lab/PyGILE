@@ -97,14 +97,14 @@ REM Remove existing environment and create new one
 REM ============================================================
 echo [2/8] Creating fresh pygile environment... [25%%]
 "%INSTALLER%" env remove -n pygile -y >nul 2>&1
-"%INSTALLER%" create -n pygile --override-channels -c conda-forge python=3.10 -y >> "%LOGFILE%" 2>&1
+"%INSTALLER%" create -n pygile --override-channels -c conda-forge python=3.12 -y >> "%LOGFILE%" 2>&1
 if !errorlevel! neq 0 (
     echo CRITICAL: Base environment creation failed
     echo CRITICAL: Base environment creation failed >> "%ERRORLOG%"
     set /a ERROR_COUNT+=1
     goto :error_exit
 ) else (
-    echo Done: Fresh pygile environment with Python 3.10
+    echo Done: Fresh pygile environment with Python 3.12
     set /a SUCCESS_COUNT+=1
 )
 
@@ -132,7 +132,7 @@ REM BATCH 2: System Geospatial Libraries + Core Bindings
 REM ============================================================
 echo [4/8] Installing geospatial core... [50%%]
 echo Installing: GDAL, PROJ, GEOS, Fiona, Shapely, PyProj, GeoPandas
-"%INSTALLER%" install -n pygile --override-channels -c conda-forge gdal proj geos libspatialindex fiona shapely pyproj geopandas -y >> "%LOGFILE%" 2>&1
+"%INSTALLER%" install -n pygile --override-channels -c conda-forge gdal proj geos libspatialindex fiona pyogrio shapely pyproj geopandas -y >> "%LOGFILE%" 2>&1
 if !errorlevel! neq 0 (
     echo WARNING: Geospatial core had issues - continuing
     echo FAILED: Geospatial core >> "%ERRORLOG%"
@@ -162,7 +162,7 @@ REM BATCH 4: Jupyter + Visualization + Interactive Tools + Node.js
 REM ============================================================
 echo [6/8] Installing visualization and interaction tools... [75%%]
 echo Installing: Jupyter, Plotly, Folium, Bokeh, Interactive widgets, matplotlib integration, Node.js
-"%INSTALLER%" install -n pygile --override-channels -c conda-forge jupyter jupyterlab ipywidgets plotly folium contextily mapclassify ipympl nodejs -y >> "%LOGFILE%" 2>&1
+"%INSTALLER%" install -n pygile --override-channels -c conda-forge jupyter jupyterlab ipywidgets plotly folium contextily mapclassify matplotlib-scalebar ipympl nodejs -y >> "%LOGFILE%" 2>&1
 if !errorlevel! neq 0 (
     echo WARNING: Visualization tools had issues - continuing
     echo FAILED: Visualization tools >> "%ERRORLOG%"
@@ -189,8 +189,8 @@ REM BATCH 5: Specialized Geospatial Analysis + Network Tools
 REM ============================================================
 echo [7/8] Installing specialized analysis tools... [87%%]
 echo Installing: OSMnx, Rasterstats, Cloud access, Earth Engine, Advanced mapping
-call :install_with_fallbacks "osmnx rasterstats xarray-spatial" "Specialized analysis core"
-call :install_with_fallbacks "pystac stackstac planetary-computer" "Cloud data access"
+call :install_with_fallbacks "osmnx rasterstats xarray-spatial pykrige" "Specialized analysis core"
+call :install_with_fallbacks "pystac pystac-client stackstac odc-stac planetary-computer" "Cloud data access"
 call :install_with_fallbacks "geemap" "Advanced mapping"
 call :install_with_fallbacks "palettable" "Color palettes"
 
@@ -204,7 +204,7 @@ echo [8/8] Installing additional utilities... [100%%]
 echo Installing: Development tools, Documentation, Regional data, Meta-packages
 
 REM Install with pip fallbacks for packages that often fail with conda
-"%INSTALLER%" run -n pygile pip install --no-cache-dir earthengine-api census us sklearn-xarray pygis >> "%LOGFILE%" 2>&1
+"%INSTALLER%" run -n pygile pip install --no-cache-dir earthengine-api sklearn-xarray pygis >> "%LOGFILE%" 2>&1
 "%INSTALLER%" run -n pygile pip install --no-cache-dir black flake8 jupyter-book nbconvert >> "%LOGFILE%" 2>&1
 "%INSTALLER%" run -n pygile pip install --no-cache-dir pykrige geojson >> "%LOGFILE%" 2>&1
 
@@ -322,7 +322,7 @@ echo 2. mamba activate pygile
 echo 3. jupyter lab
 echo.
 echo INSTALLED CAPABILITIES:
-echo - Python 3.10 with optimized package selection
+echo - Python 3.12 with optimized package selection
 echo - Vector analysis: GeoPandas, Shapely, Fiona
 echo - Raster processing: Rasterio, Xarray, GDAL
 echo - Data science: NumPy, Pandas, SciPy, Scikit-learn

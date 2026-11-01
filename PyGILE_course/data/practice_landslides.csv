@@ -1,0 +1,41 @@
+id,date,district,province,lat,lon,area_m2,trigger
+LS001,2023-08-18,Dolakha,Bagmati,27.872,86.1506,9800,rainfall
+LS002,2021-08-27,Chitwan,Bagmati,27.4871,84.5877,9800,rainfall
+LS003,2020-08-23,Rasuwa,Bagmati,28.0965,85.3034,9800,rainfall
+LS004,2023-08-11,Chitwan,Bagmati,27.7398,84.5436,9800,rainfall
+LS005,2021-09-27,Dolakha,Bagmati,27.8547,86.282,1500,rainfall
+LS006,2020-07-24,Rasuwa,Bagmati,28.0882,85.3432,120,rainfall
+LS007,2015-04-27,Gorkha,Gandaki,28.1499,84.7881,800,earthquake
+LS008,2023-08-22,Gorkha,Gandaki,28.3118,84.6572,120,rainfall
+LS009,2024-08-25,Taplejung,Koshi,27.5523,87.8582,400,road cut
+LS010,2021-05-20,Myagdi,Gandaki,28.6402,83.4514,250,road cut
+LS011,2024-07-26,Chitwan,Bagmati,27.8178,84.4758,15000,rainfall
+LS012,2021-07-13,Chitwan,Bagmati,27.6334,84.3318,250,rainfall
+LS013,2020-06-01,Sindhupalchok,Bagmati,27.9525,85.6483,1500,rainfall
+LS014,2020-09-15,Rasuwa,Bagmati,28.1172,85.3915,400,rainfall
+LS015,2021-06-15,Myagdi,Gandaki,28.5736,83.5035,250,road cut
+LS016,2015-07-02,Chitwan,Bagmati,27.7856,84.5793,120,rainfall
+LS017,2024-09-23,Rasuwa,Bagmati,28.1469,85.3144,15000,rainfall
+LS018,2023-07-22,Myagdi,Gandaki,28.6326,83.417,5200,rainfall
+LS019,2015-08-06,Chitwan,Bagmati,27.643,84.3691,9800,rainfall
+LS020,2015-04-16,Chitwan,Bagmati,27.7367,84.4582,15000,earthquake
+LS021,2015-07-01,Dolakha,Bagmati,27.9089,86.2636,2600,rainfall
+LS022,2023-06-12,Chitwan,Bagmati,27.401,84.4562,15000,rainfall
+LS023,2015-09-09,Myagdi,Gandaki,28.5634,83.4704,800,road cut
+LS024,2023-07-04,Dolakha,Bagmati,27.8238,86.3079,5200,rainfall
+LS025,2015-08-24,Kaski,Gandaki,28.3726,83.9938,250,rainfall
+LS026,2020-04-10,Taplejung,Koshi,27.5536,87.6484,1500,road cut
+LS027,2015-08-14,Gorkha,Gandaki,28.6185,84.6416,800,rainfall
+LS028,2020-06-22,Sindhupalchok,Bagmati,27.9647,85.8464,2600,rainfall
+LS029,2021-09-21,Taplejung,Koshi,27.5014,87.6114,5200,road cut
+LS030,2023-09-14,Taplejung,Koshi,27.565,87.8635,2600,rainfall
+LS031,2021-08-02,Dolakha,Bagmati,27.8565,86.131,120,rainfall
+LS032,2024-08-24,Dolakha,Bagmati,27.91,86.24,250,rainfall
+LS033,2021-06-18,Dolakha,Bagmati,27.8757,86.1447,120,rainfall
+LS034,2018-04-04,Gorkha,Gandaki,28.139,84.7068,1500,road cut
+LS035,2021-05-12,Sindhupalchok,Bagmati,27.9297,85.6632,5200,road cut
+LS036,2018-06-22,Myagdi,Gandaki,28.6021,83.4624,15000,rainfall
+LS037,2020-07-01,Chitwan,Bagmati,27.634,84.4623,5200,rainfall
+LS038,2020-06-27,Dolakha,Bagmati,27.723,86.0114,15000,rainfall
+LS039,2015-04-22,Dolakha,Bagmati,27.8818,86.1884,800,earthquake
+LS040,2015-07-24,Rasuwa,Bagmati,28.1975,85.2697,2600,rainfall
