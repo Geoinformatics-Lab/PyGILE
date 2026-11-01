@@ -1,6 +1,7 @@
 # PyGILE - Python GeoInformatics Lab Environment
 
-[![Test notebooks](https://github.com/Geoinformatics-Lab/PyGILE/actions/workflows/test-notebooks.yml/badge.svg)](https://github.com/Geoinformatics-Lab/PyGILE/actions/workflows/test-notebooks.yml)
+<!-- When this version replaces Geoinformatics-Lab/PyGILE, change VuOn7 to Geoinformatics-Lab in the two links below. -->
+[![Test notebooks](https://github.com/VuOn7/PyGILE/actions/workflows/test-notebooks.yml/badge.svg)](https://github.com/VuOn7/PyGILE/actions/workflows/test-notebooks.yml)
 
 PyGILE makes it easy to learn and apply geospatial analysis with Python. It comes with pre-configured Jupyter notebooks and works on Windows, Mac, and Linux. Whether you're a student, teacher, or researcher, PyGILE provides everything you need to start working with geospatial data.
 
