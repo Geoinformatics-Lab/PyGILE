@@ -25,6 +25,10 @@ PyGILE is an educational/application toolkit that includes:
 -  Cross-platform support (Windows, Mac, Linux)
 -  Learning materials for students and educators
 
+## New: the PyGILE Course
+
+A new, step-by-step course for absolute beginners is being built in [`PyGILE_course/`](PyGILE_course/README.md). Every step has theory, a worked example on Nepal data, and practice questions with solutions. **Part A (Python, 10 lessons, 275 questions) is ready.**
+
 ## Getting Started
 
 Choose one of three ways. Options 1 and 2 install the same libraries; option 3 uses a ready-made Docker image.
